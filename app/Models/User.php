@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes; // <-- 1. Importamos SoftDeletes
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -21,6 +22,7 @@ class User extends Authenticatable
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
+    use SoftDeletes; // <-- 2. Usamos SoftDeletes dentro de la clase
 
     /**
      * The attributes that are mass assignable.
@@ -31,6 +33,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'phone', // <-- 3. Agregamos el teléfono para WhatsApp
+        'role',  // <-- 4. Agregamos el rol (admin, staff, client)
     ];
 
     /**
@@ -65,5 +69,17 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // <-- 5. Relación: Si el usuario es un CLIENTE, tiene muchas citas
+    public function customerAppointments()
+    {
+        return $this->hasMany(Appointment::class, 'client_id');
+    }
+
+    // <-- 6. Relación: Si el usuario es STAFF (Barbero), tiene muchas citas asignadas
+    public function staffAppointments()
+    {
+        return $this->hasMany(Appointment::class, 'staff_id');
     }
 }
