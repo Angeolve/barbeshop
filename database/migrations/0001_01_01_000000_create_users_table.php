@@ -15,12 +15,16 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('phone')->nullable(); // <-- Línea agregada para WhatsApp
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            // Roles: admin, staff (barberos), client (clientes)
+            $table->enum('role', ['admin', 'staff', 'client'])->default('client'); // <-- Línea agregada
             $table->rememberToken();
             $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
             $table->timestamps();
+            $table->softDeletes(); // <-- Línea agregada para la rúbrica
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
