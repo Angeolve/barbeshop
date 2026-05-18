@@ -14,16 +14,23 @@ Route::middleware([
     'verified',
 ])->group(function () {
     
-    // El Dashboard común que ya viste en pantalla
+    // El Dashboard común
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
 
     // ==========================================
+    // RUTAS EXCLUSIVAS DEL CLIENTE
+    // ==========================================
+    Route::middleware(['role:client'])->group(function () {
+        Route::get('/my-appointments', [\App\Http\Controllers\AppointmentController::class, 'index'])->name('appointments.client_index');
+        Route::patch('/appointments/{id}/cancel', [\App\Http\Controllers\AppointmentController::class, 'cancel'])->name('appointments.cancel');
+    });
+
+    // ==========================================
     // RUTAS EXCLUSIVAS DEL ADMINISTRADOR
     // ==========================================
     Route::middleware(['role:admin'])->group(function () {
-        
         // Rutas de Servicios
         Route::patch('/services/{id}/restore', [\App\Http\Controllers\ServiceController::class, 'restore'])->name('services.restore');
         Route::resource('services', \App\Http\Controllers\ServiceController::class);
@@ -32,23 +39,23 @@ Route::middleware([
         Route::patch('/staff/{id}/restore', [\App\Http\Controllers\StaffController::class, 'restore'])->name('staff.restore');
         Route::resource('staff', \App\Http\Controllers\StaffController::class);
 
-        // <-- AGREGAR ESTAS LÍNEAS AQUÍ PARA LOS CLIENTES -->
+        // Rutas de Clientes
         Route::patch('/clients/{id}/restore', [\App\Http\Controllers\ClientController::class, 'restore'])->name('clients.restore');
         Route::resource('clients', \App\Http\Controllers\ClientController::class);
     });
 
     // ==========================================
-    // RUTAS COMPARTIDAS: ADMINISTRADOR Y STAFF (Barberos)
+    // RUTAS TOTALMENTE COMPARTIDAS (Proceso de reserva libre de candados)
     // ==========================================
-    Route::middleware(['role:admin,staff'])->group(function () {
-        // Agenda global de citas, control de asistencia, reportes de cortes del día
-    });
+    Route::get('/appointments/book', [\App\Http\Controllers\AppointmentController::class, 'create'])->name('appointments.create');
+    Route::post('/appointments/book', [\App\Http\Controllers\AppointmentController::class, 'store'])->name('appointments.store');
 
     // ==========================================
-    // RUTAS EXCLUSIVAS DEL CLIENTE
+    // RUTAS DE LA AGENDA MAESTRA (ADMIN Y STAFF)
     // ==========================================
-    Route::middleware(['role:client'])->group(function () {
-        // Mis Citas (Historial del cliente, agendar su propia cita)
+    Route::middleware(['role:admin,staff'])->group(function () {
+        Route::get('/appointments', [\App\Http\Controllers\AppointmentController::class, 'index'])->name('appointments.index');
+        Route::patch('/appointments/{id}/status', [\App\Http\Controllers\AppointmentController::class, 'updateStatus'])->name('appointments.status');
     });
 
 });
