@@ -82,4 +82,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Appointment::class, 'staff_id');
     }
+
+    // <-- 7. Relación: Si el usuario es STAFF (Barbero), tiene un horario laboral definido
+    public function schedule()
+    {
+        return $this->hasOne(StaffSchedule::class, 'user_id');
+    }
 }

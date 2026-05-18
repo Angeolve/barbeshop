@@ -15,6 +15,7 @@ class Appointment extends Model
         'staff_id',
         'service_id',
         'appointment_time',
+        'appointment_date', // Permitir asignación masiva de alias
         'status',
         'notes'
     ];
@@ -31,9 +32,27 @@ class Appointment extends Model
         return $this->belongsTo(User::class, 'staff_id')->withTrashed();
     }
 
+    // Alias de relación para compatibilidad con código existente
+    public function barber()
+    {
+        return $this->belongsTo(User::class, 'staff_id')->withTrashed();
+    }
+
     // Relación: La cita incluye un Servicio específico
     public function service()
     {
         return $this->belongsTo(Service::class, 'service_id')->withTrashed();
+    }
+
+    // Accessor para obtener la fecha de la cita usando el nombre viejo
+    public function getAppointmentDateAttribute()
+    {
+        return $this->appointment_time;
+    }
+
+    // Mutator para guardar la fecha de la cita usando el nombre viejo
+    public function setAppointmentDateAttribute($value)
+    {
+        $this->attributes['appointment_time'] = $value;
     }
 }

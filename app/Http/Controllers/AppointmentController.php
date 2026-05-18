@@ -21,11 +21,11 @@ class AppointmentController extends Controller
         if ($user->role === 'client') {
             $appointments = Appointment::with(['service', 'barber'])
                 ->where('client_id', $user->id)
-                ->orderBy('appointment_date', 'asc')
+                ->orderBy('appointment_time', 'asc')
                 ->get();
         } else {
             $appointments = Appointment::with(['service', 'barber', 'client'])
-                ->orderBy('appointment_date', 'asc')
+                ->orderBy('appointment_time', 'asc')
                 ->get();
         }
 
@@ -38,15 +38,48 @@ class AppointmentController extends Controller
     public function create()
     {
         $services = Service::all();
-        $barbers = User::where('role', 'staff')->get();
         
-        // Si el usuario es Admin o Staff, cargamos los clientes para que puedan registrar la cita por ellos
-        $clients = null;
-        if (in_array(Auth::user()->role, ['admin', 'staff'])) {
-            $clients = User::where('role', 'client')->get();
+        // Cargar barberos y asegurar que tengan horarios
+        $barbers = User::where('role', 'staff')->with('schedule')->get();
+        foreach ($barbers as $barber) {
+            if (!$barber->schedule) {
+                \App\Models\StaffSchedule::create([
+                    'user_id' => $barber->id,
+                    'monday' => true,
+                    'tuesday' => true,
+                    'wednesday' => true,
+                    'thursday' => true,
+                    'friday' => true,
+                    'saturday' => true,
+                    'sunday' => false,
+                    'shift' => 'mañana',
+                ]);
+            }
         }
+        
+        // Volver a consultar con la relación de horarios
+        $barbers = User::where('role', 'staff')->with('schedule')->get();
 
-        return view('appointments.create', compact('services', 'barbers', 'clients'));
+        // Estructura de datos para JavaScript
+        $barbersData = $barbers->map(function ($barber) {
+            return [
+                'id' => $barber->id,
+                'name' => $barber->name,
+                'shift' => $barber->schedule->shift,
+                'monday' => (bool)$barber->schedule->monday,
+                'tuesday' => (bool)$barber->schedule->tuesday,
+                'wednesday' => (bool)$barber->schedule->wednesday,
+                'thursday' => (bool)$barber->schedule->thursday,
+                'friday' => (bool)$barber->schedule->friday,
+                'saturday' => (bool)$barber->schedule->saturday,
+                'sunday' => (bool)$barber->schedule->sunday,
+            ];
+        });
+
+        // Todos los clientes registrados para selección
+        $clients = User::where('role', 'client')->get();
+
+        return view('appointments.create', compact('services', 'barbers', 'clients', 'barbersData'));
     }
 
     /**
@@ -60,23 +93,24 @@ class AppointmentController extends Controller
         $rules = [
             'service_id' => 'required|exists:services,id',
             'barber_id' => 'required|exists:users,id',
-            'appointment_date' => 'required|date|after:now',
+            'appointment_date_only' => 'required|date|after_or_equal:today',
+            'appointment_time_slot' => 'required|string',
         ];
 
-        // Si es Admin o Staff, el cliente es obligatorio desde el select del formulario
-        if (in_array($user->role, ['admin', 'staff'])) {
-            $rules['client_id'] = 'required|exists:users,id';
-        }
+        // El cliente es obligatorio
+        $rules['client_id'] = 'required|exists:users,id';
 
         $validated = $request->validate($rules);
 
+        // Combinar fecha y hora
+        $appointmentTime = $validated['appointment_date_only'] . ' ' . $validated['appointment_time_slot'];
+
         Appointment::create([
-            // Si es cliente, se asigna su propio ID de sesión; si es Admin/Staff, el que eligieron del select
-            'client_id' => $user->role === 'client' ? $user->id : $validated['client_id'],
-            'barber_id' => $validated['barber_id'],
+            'client_id' => $validated['client_id'],
+            'staff_id' => $validated['barber_id'], // Guardar en staff_id (columna de base de datos)
             'service_id' => $validated['service_id'],
-            'appointment_date' => $validated['appointment_date'],
-            'status' => 'pending',
+            'appointment_time' => $appointmentTime,
+            'status' => 'scheduled',
         ]);
 
         // Redirección inteligente dependiendo del rol

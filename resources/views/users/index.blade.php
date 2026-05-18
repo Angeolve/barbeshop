@@ -1,12 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex justify-between items-center">
-            <h2 class="font-extrabold text-2xl text-gray-900 tracking-tight">
-                {{ __('Gestión de Servicios') }}
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ __('Gestión de Usuarios y Roles') }}
             </h2>
-            <a href="{{ route('services.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-black font-black text-xs uppercase tracking-wider rounded-xl shadow-md shadow-amber-500/20 transition-all duration-200 hover:shadow-lg hover:shadow-amber-500/30 hover:-translate-y-0.5">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                Nuevo Servicio
+            <a href="{{ route('users.create') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition">
+                + Nuevo Usuario
             </a>
         </div>
     </x-slot>
@@ -15,7 +14,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             
             @if (session('success'))
-                <div class="mb-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-rShadow shadow" role="alert">
+                <div class="mb-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-r shadow" role="alert">
                     <p class="font-bold">¡Éxito!</p>
                     <p>{{ session('success') }}</p>
                 </div>
@@ -27,37 +26,46 @@
                         <thead class="bg-gray-50">
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descripción</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Precio</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duración</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Correo / Teléfono</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rol</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
                                 <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            @forelse ($services as $service)
-                                <tr class="{{ $service->trashed() ? 'bg-red-50' : '' }}">
-                                    <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">{{ $service->name }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-500 max-w-sm whitespace-normal break-words">{{ $service->description ?? 'Sin descripción' }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${{ number_format($service->price, 2) }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $service->duration_minutes }} min</td>
+                            @forelse ($users as $user)
+                                <tr class="{{ $user->trashed() ? 'bg-red-50' : '' }}">
+                                    <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">{{ $user->name }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {{ $user->email }}<br>
+                                        <span class="text-xs text-gray-400">{{ $user->phone ?? 'No registrado' }}</span>
+                                    </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        @if($service->trashed())
-                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Inactivo (Soft Delete)</span>
+                                        @if($user->role === 'admin')
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">Administrador</span>
+                                        @elseif($user->role === 'staff')
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Barbero (Staff)</span>
+                                        @else
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Cliente</span>
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        @if($user->trashed())
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Inactivo</span>
                                         @else
                                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Activo</span>
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                                         <div class="flex items-center justify-center space-x-2">
-                                            <a href="{{ route('services.edit', $service->id) }}" title="Editar" class="p-1.5 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition duration-150">
+                                            <a href="{{ route('users.edit', $user->id) }}" title="Editar" class="p-1.5 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition duration-150">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                                                 </svg>
                                             </a>
                                             
-                                            @if($service->trashed())
-                                                <form action="{{ route('services.restore', $service->id) }}" method="POST" onsubmit="return confirm('¿Deseas reactivar este servicio?');" class="inline">
+                                            @if($user->trashed())
+                                                <form action="{{ route('users.restore', $user->id) }}" method="POST" class="inline" onsubmit="return confirm('¿Deseas reactivar a este usuario?');">
                                                     @csrf
                                                     @method('PATCH')
                                                     <button type="submit" title="Restaurar" class="p-1.5 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition duration-150">
@@ -67,7 +75,7 @@
                                                     </button>
                                                 </form>
                                             @else
-                                                <form action="{{ route('services.destroy', $service->id) }}" method="POST" onsubmit="return confirm('¿Seguro que deseas deshabilitar este servicio?');" class="inline">
+                                                <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="inline" onsubmit="return confirm('¿Seguro que deseas deshabilitar a este usuario?');">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" title="Deshabilitar" class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition duration-150">
@@ -82,13 +90,16 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="px-6 py-4 text-center text-gray-500">No hay servicios registrados.</td>
+                                    <td colspan="5" class="px-6 py-4 text-center text-gray-500">No hay usuarios registrados.</td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
             </div>
+            
+            <div class="mt-4">
+                {{ $users->links() }}
             </div>
         </div>
     </div>
