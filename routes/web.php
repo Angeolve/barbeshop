@@ -24,13 +24,13 @@ Route::middleware([
     // ==========================================
     Route::middleware(['role:admin'])->group(function () {
         
-        // Rutas especiales para el Soft Delete de Servicios (deben ir antes del resource)
+        // Rutas de Servicios
         Route::patch('/services/{id}/restore', [\App\Http\Controllers\ServiceController::class, 'restore'])->name('services.restore');
-        
-        // CRUD estándar de Servicios (index, create, store, edit, update, destroy)
         Route::resource('services', \App\Http\Controllers\ServiceController::class);
         
-        // Aquí meteremos más adelante el Staff y Clientes...
+        // Rutas de Staff (Barberos)
+        Route::patch('/staff/{id}/restore', [\App\Http\Controllers\StaffController::class, 'restore'])->name('staff.restore');
+        Route::resource('staff', \App\Http\Controllers\StaffController::class);
     });
 
     // ==========================================
