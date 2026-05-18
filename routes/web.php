@@ -31,6 +31,10 @@ Route::middleware([
         // Rutas de Staff (Barberos)
         Route::patch('/staff/{id}/restore', [\App\Http\Controllers\StaffController::class, 'restore'])->name('staff.restore');
         Route::resource('staff', \App\Http\Controllers\StaffController::class);
+
+        // <-- AGREGAR ESTAS LÍNEAS AQUÍ PARA LOS CLIENTES -->
+        Route::patch('/clients/{id}/restore', [\App\Http\Controllers\ClientController::class, 'restore'])->name('clients.restore');
+        Route::resource('clients', \App\Http\Controllers\ClientController::class);
     });
 
     // ==========================================
