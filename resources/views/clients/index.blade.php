@@ -1,18 +1,14 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Gestión de Clientes') }}
-            </h2>
-            <a href="{{ route('clients.create') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring focus:ring-gray-300 disabled:opacity-25 transition">
-                + Registrar Cliente
-            </a>
-        </div>
-    </x-slot>
+    
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            
+
+            <div class="flex justify-between items-center mb-6 bg-white p-6 shadow-xl sm:rounded-lg">
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight">Listado de Clientes Registrados</h2>
+                <a href="{{ route('clients.create') }}" class="inline-flex items-center px-4 py-2 bg-amber-500 hover:bg-amber-600 border border-transparent rounded-md font-semibold text-xs text-amber-700 uppercase tracking-widest shadow transition ease-in-out duration-150">+ Nuevo Cliente</a>
+            </div>
+
             @if (session('success'))
                 <div class="mb-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-r shadow" role="alert">
                     <p class="font-bold">¡Éxito!</p>

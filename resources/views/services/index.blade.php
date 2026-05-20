@@ -1,19 +1,13 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-extrabold text-2xl text-gray-900 tracking-tight">
-                {{ __('Gestión de Servicios') }}
-            </h2>
-            <a href="{{ route('services.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-black font-black text-xs uppercase tracking-wider rounded-xl shadow-md shadow-amber-500/20 transition-all duration-200 hover:shadow-lg hover:shadow-amber-500/30 hover:-translate-y-0.5">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                Nuevo Servicio
-            </a>
-        </div>
-    </x-slot>
-
+    
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            
+
+            <div class="flex justify-between items-center mb-6 bg-white p-6 shadow-xl sm:rounded-lg">
+                <h2 class="font-extrabold text-2xl text-gray-900 tracking-tight">Catálogo de Servicios</h2>
+                <a href="{{ route('services.create') }}" class="inline-flex items-center px-4 py-2 bg-amber-500 hover:bg-amber-600 border border-transparent rounded-md font-semibold text-xs text-amber-700 uppercase tracking-widest shadow transition ease-in-out duration-150">+ Nuevo Servicio</a>
+            </div>
+
             @if (session('success'))
                 <div class="mb-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-rShadow shadow" role="alert">
                     <p class="font-bold">¡Éxito!</p>

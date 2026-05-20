@@ -1,18 +1,12 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-extrabold text-2xl text-gray-900 tracking-tight">
-                {{ Auth::user()->role === 'client' ? __('Mis Citas Agendadas') : __('Agenda Global de Citas') }}
-            </h2>
-            <a href="{{ route('appointments.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-black font-black text-xs uppercase tracking-wider rounded-xl shadow-md shadow-amber-500/20 transition-all duration-200 hover:shadow-lg hover:shadow-amber-500/30 hover:-translate-y-0.5">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                Agendar Nueva Cita
-            </a>
-        </div>
-    </x-slot>
-
+    
     <div class="py-8">
         <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
+
+            <div class="flex justify-between items-center mb-6 bg-white p-6 shadow-xl sm:rounded-lg">
+                <h2 class="font-extrabold text-2xl text-gray-900 tracking-tight">{{ Auth::user()->role === 'client' ? __('Mis Citas Agendadas') : __('Agenda Global de Citas') }}</h2>
+                <a href="{{ route('appointments.create') }}" class="inline-flex items-center px-4 py-2 bg-amber-500 hover:bg-amber-600 border border-transparent rounded-md font-semibold text-xs text-amber-700 uppercase tracking-widest shadow transition ease-in-out duration-150">+ Agendar Nueva Cita</a>
+            </div>
 
             @if (session('success'))
                 <div class="mb-5 bg-green-50 border-l-4 border-green-500 text-green-800 px-5 py-4 rounded-xl shadow-sm flex items-start gap-3" role="alert">
@@ -135,9 +129,7 @@
                                         <div class="flex flex-col items-center gap-3">
                                             <svg class="w-12 h-12 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                                             <p class="text-gray-400 font-semibold text-sm">No hay citas agendadas en este momento.</p>
-                                            <a href="{{ route('appointments.create') }}" class="mt-1 inline-flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-black font-black text-xs uppercase tracking-wider rounded-lg shadow-sm hover:from-amber-600 hover:to-orange-600 transition">
-                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v3m0 0v3m0-3h3m-3 0H9"/></svg>
-                                                Agendar Primera Cita
+                                            <a href="{{ route('appointments.create') }}" class="mt-1 inline-flex items-center justify-center w-10 h-10 rounded-full bg-amber-500 hover:bg-amber-600 text-amber-700 text-lg font-bold shadow transition" title="Agendar Cita" aria-label="Agendar Cita">+
                                             </a>
                                         </div>
                                     </td>

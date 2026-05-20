@@ -7,6 +7,9 @@ use App\Models\Service;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\AppointmentConfirmedMail;
+use Illuminate\Support\Facades\Log;
 
 class AppointmentController extends Controller
 {
@@ -38,7 +41,7 @@ class AppointmentController extends Controller
     public function create()
     {
         $services = Service::all();
-        
+
         // Cargar barberos y asegurar que tengan horarios
         $barbers = User::where('role', 'staff')->with('schedule')->get();
         foreach ($barbers as $barber) {
@@ -56,7 +59,7 @@ class AppointmentController extends Controller
                 ]);
             }
         }
-        
+
         // Volver a consultar con la relación de horarios
         $barbers = User::where('role', 'staff')->with('schedule')->get();
 
@@ -66,13 +69,13 @@ class AppointmentController extends Controller
                 'id' => $barber->id,
                 'name' => $barber->name,
                 'shift' => $barber->schedule->shift,
-                'monday' => (bool)$barber->schedule->monday,
-                'tuesday' => (bool)$barber->schedule->tuesday,
-                'wednesday' => (bool)$barber->schedule->wednesday,
-                'thursday' => (bool)$barber->schedule->thursday,
-                'friday' => (bool)$barber->schedule->friday,
-                'saturday' => (bool)$barber->schedule->saturday,
-                'sunday' => (bool)$barber->schedule->sunday,
+                'monday' => (bool) $barber->schedule->monday,
+                'tuesday' => (bool) $barber->schedule->tuesday,
+                'wednesday' => (bool) $barber->schedule->wednesday,
+                'thursday' => (bool) $barber->schedule->thursday,
+                'friday' => (bool) $barber->schedule->friday,
+                'saturday' => (bool) $barber->schedule->saturday,
+                'sunday' => (bool) $barber->schedule->sunday,
             ];
         });
 
@@ -105,13 +108,23 @@ class AppointmentController extends Controller
         // Combinar fecha y hora
         $appointmentTime = $validated['appointment_date_only'] . ' ' . $validated['appointment_time_slot'];
 
-        Appointment::create([
+        $appointment = Appointment::create([
             'client_id' => $validated['client_id'],
             'staff_id' => $validated['barber_id'], // Guardar en staff_id (columna de base de datos)
             'service_id' => $validated['service_id'],
             'appointment_time' => $appointmentTime,
             'status' => 'scheduled',
         ]);
+
+        // Intentar enviar el ticket PDF al cliente
+        try {
+            $appointment->load(['client', 'barber', 'service']);
+            if ($appointment->client && $appointment->client->email) {
+                Mail::to($appointment->client->email)->send(new AppointmentConfirmedMail($appointment));
+            }
+        } catch (\Exception $e) {
+            Log::error('Error enviando email de confirmación de cita: ' . $e->getMessage());
+        }
 
         // Redirección inteligente dependiendo del rol
         if ($user->role === 'client') {
