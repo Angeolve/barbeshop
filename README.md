@@ -70,6 +70,14 @@ Ciclo Diario (Asincrónico): Todos los días a las 10:00 AM, el servidor despier
 
 - Compila la hoja de ruta en PDF de cada barbero con sus bloques horarios del día y se la envía adjunta mediante el Mailable `BarberDailyAgendaMail`.
 
+## Niveles de Acceso y Seguridad
+
+El sistema implementa un control de acceso estricto para garantizar la integridad de los datos y facilitar la operatividad:
+
+- **Administrador:** Acceso total a todas las funciones del sistema, incluyendo la creación, edición, eliminación y restauración de registros (CRUD completo).
+- **Staff (Barberos):** Cuenta con **Visibilidad Total** en todos los módulos (Servicios, Usuarios, Clientes, Agenda y Horarios).
+    - _Nota de Seguridad:_ Para evitar modificaciones accidentales o cambios no autorizados, el rol de Staff está protegido por un middleware de **"Solo Lectura"**. Esto permite al personal monitorear y consultar toda la información operativa, pero bloquea automáticamente cualquier intento de modificación (POST, PUT, PATCH, DELETE), asegurando que los datos críticos permanezcan inalterables.
+
 ## 🚀 Instrucciones de Instalación y Despliegue
 
 Sigue estos pasos para clonar y ejecutar el proyecto localmente en tu entorno de desarrollo:
