@@ -162,7 +162,7 @@ Para facilitar el mantenimiento técnico, ubica los componentes principales en l
 
 Aquí puedes visualizar la estructura de la base de datos de la BarberShop:
 
-![Diagrama de Base de Datos](imagenes/diagrama_bd.png)
+![Diagrama de Base de Datos](/imagenes/barbershop-db-diagram.png)
 
   <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
