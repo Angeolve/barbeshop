@@ -157,6 +157,13 @@ Para facilitar el mantenimiento técnico, ubica los componentes principales en l
 - Plantillas de PDF: `pdf/appointment_ticket.blade.php`, `pdf/barber_agenda.blade.php`
 
 - Menú de Navegación Principal: `resources/views/layouts/sidebar.blade.php`
+
+## Diagrama de Base de Datos
+
+Aquí puedes visualizar la estructura de la base de datos de la BarberShop:
+
+![Diagrama de Base de Datos](imagenes/diagrama_bd.png)
+
   <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
