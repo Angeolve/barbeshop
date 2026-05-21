@@ -6,7 +6,7 @@
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                     {{ __('Gestión de Usuarios y Roles') }}
                 </h2>
-                <a href="{{ route('users.create') }}" class="inline-flex items-center px-4 py-2 bg-amber-500 hover:bg-amber-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest shadow transition ease-in-out duration-150">
+                <a href="{{ route('users.create') }}" class="inline-flex items-center px-4 py-2 bg-amber-500 hover:bg-amber-600 border border-transparent rounded-md font-semibold text-xs text-amber-400 tracking-widest shadow transition ease-in-out duration-150">
                     + Crear Nuevo Usuario
                 </a>
             </div>
