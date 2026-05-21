@@ -1,6 +1,15 @@
 <x-app-layout>
     
 
+    {{--
+        Vista: clients.index
+        Comentarios: Lista todos los usuarios con `role = 'client'`.
+        - La tabla muestra información básica (nombre, email, teléfono) y
+        el estado según soft deletes.
+        - Para añadir columnas, modificar el <thead> y el <tbody> dentro
+        del loop `@forelse`. Asegúrate de cargar en el controlador los
+        datos relacionados si son necesarios (e.g., relaciones).
+    --}}
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
@@ -17,6 +26,9 @@
             @endif
 
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
+                {{-- Tabla de clientes: cada fila usa `$client`.
+                     - `$client->trashed()` indica soft delete. Mantén el
+                     comportamiento si cambias el método de eliminación. --}}
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">

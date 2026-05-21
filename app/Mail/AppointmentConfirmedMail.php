@@ -12,6 +12,14 @@ class AppointmentConfirmedMail extends Mailable
 {
   use Queueable, SerializesModels;
 
+  /**
+   * Mailable: Confirmation de cita con ticket PDF adjunto.
+   * - Construye el PDF usando `Pdf::loadView('pdf.appointment_ticket', [...])`.
+   * - Adjunta el PDF con `attachData($pdf->output(), $fileName, ['mime' => 'application/pdf'])`.
+   * - Recomendación: para producción implementar `ShouldQueue` y usar
+   *   `Mail::to(...)->queue($mailable)` para no bloquear la respuesta HTTP.
+   */
+
   public $appointment;
 
   /**

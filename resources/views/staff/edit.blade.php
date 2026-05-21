@@ -5,7 +5,15 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
+        {{--
+                Vista: staff.edit
+                Comentarios: Formulario para editar datos básicos del barbero.
+                - Los inputs usan `old(..., $barber->field)` para preservar datos
+                    tras errores de validación.
+                - No actualiza contraseña aquí; si lo permites, añade campos y
+                    lógica en `StaffController@update` para manejar el hash.
+        --}}
+        <div class="py-12">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
                 

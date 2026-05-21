@@ -9,6 +9,20 @@ use Illuminate\Support\Facades\Hash;
 class StaffController extends Controller
 {
     /**
+     * Módulo: Barberos (Staff)
+     * Propósito: CRUD para usuarios con rol `staff` (barberos).
+     * Comentarios y guía de modificación:
+     * - Las consultas filtran por `where('role', 'staff')`. Si cambias
+     *   cómo se gestionan roles, actualiza estas consultas.
+     * - `store()` asigna `role => 'staff'` automáticamente.
+     * - `destroy()` usa Soft Deletes vía `$barber->delete()`. Para borrar
+     *   permanentemente, usar `$barber->forceDelete()` con precaución.
+     * - `restore()` revierte soft delete; asegúrate de limpiar datos
+     *   relacionados si introduces borrados en cascada.
+     * - Validaciones: si añades campos (ej. `specialty`), actualizar
+     *   reglas en `store()` y `update()` y adaptar vistas.
+     */
+    /**
      * Listar solo el personal de la barbería (incluyendo deshabilitados).
      */
     public function index()

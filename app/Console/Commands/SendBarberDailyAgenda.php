@@ -16,6 +16,15 @@ class SendBarberDailyAgenda extends Command
   protected $signature = 'barbers:daily-agenda';
   protected $description = 'Enviar agenda diaria en PDF a cada barbero con las citas del día';
 
+  /**
+   * Comando: barbers:daily-agenda
+   * - Extrae citas del día y genera un PDF por barbero con su agenda.
+   * - Puntos a revisar si editas:
+   *   - La vista `pdf.barber_agenda` debe aceptar `barber` y `appointments`.
+   *   - Se pasa `$barberAppointments` al Mailable como 4º parámetro.
+   *   - Para escalabilidad usa `chunkById()` y `queue()` para envíos.
+   */
+
   public function handle()
   {
     $today = Carbon::today()->toDateString();

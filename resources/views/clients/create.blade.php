@@ -5,7 +5,16 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
+        {{--
+                Vista: clients.create
+                Comentarios: Formulario para registrar manualmente un cliente.
+                Guía de modificación:
+                - Para agregar un campo (ej. birthdate), añadir el input aquí,
+                    luego actualizar `ClientController@store` con la validación y
+                    mapear el nuevo valor en `User::create([...])`.
+                - Mantén las clases Tailwind en inputs para conservar el estilo.
+        --}}
+        <div class="py-12">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
                 

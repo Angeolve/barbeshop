@@ -26,6 +26,15 @@ class SendAppointmentReminders extends Command
   protected $description = 'Enviar recordatorios de cita para las citas de mañana';
 
   /**
+   * Comando: appointments:reminders
+   * - Busca las citas programadas para 'tomorrow' y envía un
+   *   `AppointmentReminderMail` a cada cliente.
+   * - Recomendación: usar `chunk()` en lugar de `get()` si la tabla
+   *   puede contener muchas filas, y reemplazar `send()` por `queue()`
+   *   cuando el Mailable implemente `ShouldQueue`.
+   */
+
+  /**
    * Execute the console command.
    */
   public function handle()

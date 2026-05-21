@@ -37,6 +37,11 @@ class User extends Authenticatable
         'role',  // <-- 4. Agregamos el rol (admin, staff, client)
     ];
 
+    // Comentario: El campo `role` define el tipo de usuario. No lo modifiques
+    // sin revisar la lógica en controladores y vistas que filtran por role
+    // (e.g., `where('role', 'client')`). Si deseas un sistema de roles más
+    // complejo en el futuro, considera integrar una librería de roles/perm.
+
     /**
      * The attributes that should be hidden for serialization.
      *

@@ -1,6 +1,16 @@
+{{--
+        Vista: staff.index
+        Propósito: Lista de barberos con acciones (editar, deshabilitar, restaurar).
+        Guía rápida:
+        - Los estados usan `trashed()` para mostrar si el barbero está inactivo.
+        - La acción de deshabilitar aplica soft delete; para cambios en la
+            política de eliminación revisar `User` y `StaffController::destroy`.
+        - Para añadir columnas (ej. especialidad), actualizar la consulta en
+            `StaffController@index` y la tabla aquí.
+--}}
 <x-app-layout>
     
-    <div class="py-12">
+        <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
             <div class="flex justify-between items-center mb-6 bg-white p-6 shadow-xl sm:rounded-lg">

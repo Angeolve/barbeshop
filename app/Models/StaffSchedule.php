@@ -40,4 +40,9 @@ class StaffSchedule extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    // Comentario: Este modelo representa la disponibilidad semanal de un
+    // barbero. Al modificar la estructura (p. ej. añadir rangos de
+    // horario por día), crea una nueva migración y adapta los forms y
+    // validaciones en `StaffScheduleController`.
 }

@@ -5,7 +5,19 @@
         </h2>
     </x-slot>
 
-    <div class="py-12" x-data='{
+        {{--
+                Vista: appointments.create
+                Comentarios: Esta vista usa AlpineJS para manejar la lógica de selección
+                dinámica de barberos, fecha y franjas horarias. La variable `barbersData`
+                proviene del controlador y debe incluir banderas por día y el `shift`.
+                Guía rápida:
+                - Para añadir un campo nuevo al formulario, agrégalo dentro del
+                    `<form>` y en `AppointmentController@store` actualiza las reglas y
+                    el array pasado a `Appointment::create([...])`.
+                - Si modificas la estructura de `barbersData`, actualiza aquí los
+                    accesores de Alpine (por ejemplo `activeBarber` y `timeSlots`).
+        --}}
+        <div class="py-12" x-data='{
         barbers: @json($barbersData),
         services: @json($services),
         clients: @json($clients),

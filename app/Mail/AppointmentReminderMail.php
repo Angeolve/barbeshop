@@ -11,6 +11,13 @@ class AppointmentReminderMail extends Mailable
 {
   use Queueable, SerializesModels;
 
+  /**
+   * Mailable: Recordatorio de cita (sin PDF).
+   * - Usa la vista `emails.appointment_reminder`.
+   * - Si se desea un adjunto PDF, generar el PDF antes y usar
+   *   `attachData` como en `AppointmentConfirmedMail`.
+   */
+
   public $appointment;
 
   /**

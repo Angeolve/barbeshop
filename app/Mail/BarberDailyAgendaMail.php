@@ -23,6 +23,16 @@ class BarberDailyAgendaMail extends Mailable
     $this->appointments = $appointments; // <-- La asignamos en el constructor
   }
 
+  /**
+   * Comentario: Este Mailable envía la agenda diaria (PDF) al barbero.
+   * - `$pdfData` debe ser el contenido binario del PDF (resultado de
+   *   `$pdf->output()`).
+   * - La vista HTML `emails.barber_daily_agenda` recibe `appointments`
+   *   para mostrar un resumen embebido en el correo además del PDF.
+   * - Para mayor resiliencia, implementa `ShouldQueue` si prevés muchas
+   *   agendas simultáneas.
+   */
+
   public function build()
   {
     $fileName = 'Agenda_Barbero_' . ($this->barber->id ?? '0') . '_' . $this->date . '.pdf';

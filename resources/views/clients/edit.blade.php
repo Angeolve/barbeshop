@@ -5,7 +5,15 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
+        {{--
+                Vista: clients.edit
+                Comentarios: Formulario para editar los datos del cliente.
+                - Los valores se inicializan con `old(..., $client->field)` para
+                    preservar entradas en caso de error de validación.
+                - Si añades campos al formulario, actualiza `ClientController@update`
+                    para incluir las validaciones y persistencia correspondientes.
+        --}}
+        <div class="py-12">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
                 

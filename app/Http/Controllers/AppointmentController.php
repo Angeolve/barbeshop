@@ -15,6 +15,12 @@ class AppointmentController extends Controller
 {
     /**
      * Mostrar la agenda de citas con filtros según el rol.
+     *
+     * Comentarios: Esta acción carga las citas dependiendo del rol del
+     * usuario autenticado. Si el rol es `client`, se devuelven solo las citas
+     * del cliente actual; para `staff` o `admin` se devuelve la agenda completa.
+     * Mantener este comportamiento es importante para la separación de
+     * información entre clientes y personal.
      */
     public function index()
     {
@@ -37,6 +43,16 @@ class AppointmentController extends Controller
 
     /**
      * Formulario para agendar una nueva cita (Compartido).
+     *
+     * Comentarios: Esta acción prepara los datos para el formulario de
+     * reserva: servicios disponibles, lista de barberos con su 'schedule'
+     * y una estructura `barbersData` en formato JSON usada por AlpineJS en
+     * la vista `appointments.create`.
+     *
+     * Nota de mantenimiento: Si se modifica la estructura de `StaffSchedule`
+     * (por ejemplo añadiendo `start_time` / `end_time`), actualizar también
+     * el mapeo dentro de este método para que `barbersData` incluya las
+     * nuevas propiedades necesarias por el JavaScript.
      */
     public function create()
     {
@@ -45,6 +61,9 @@ class AppointmentController extends Controller
         // Cargar barberos y asegurar que tengan horarios
         $barbers = User::where('role', 'staff')->with('schedule')->get();
         foreach ($barbers as $barber) {
+            // Si un barbero no tiene registro de horario, se crea uno por
+            // defecto para evitar errores en la vista. Esto facilita la
+            // experiencia cuando se agregan barberos desde el panel.
             if (!$barber->schedule) {
                 \App\Models\StaffSchedule::create([
                     'user_id' => $barber->id,
@@ -87,6 +106,14 @@ class AppointmentController extends Controller
 
     /**
      * Guardar la cita en la base de datos (Validación Backend).
+     *
+     * Comentarios: Aquí se realiza la validación de los campos enviados
+     * desde el formulario, se compone la fecha/hora `appointment_time` y se
+     * crea el registro en la tabla `appointments`. Si en el futuro añades
+     * campos (ej. `notes`), debes:
+     *  - actualizar `$rules` con las nuevas validaciones,
+     *  - agregar el campo al array pasado a `Appointment::create([...])`,
+     *  - y actualizar la vista `appointments.create` para enviar el nuevo input.
      */
     public function store(Request $request)
     {
@@ -123,6 +150,8 @@ class AppointmentController extends Controller
                 Mail::to($appointment->client->email)->send(new AppointmentConfirmedMail($appointment));
             }
         } catch (\Exception $e) {
+            // Registrar el error y continuar: no queremos que una excepción
+            // de correo interrumpa la creación de la cita.
             Log::error('Error enviando email de confirmación de cita: ' . $e->getMessage());
         }
 

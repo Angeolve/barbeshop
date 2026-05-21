@@ -27,6 +27,14 @@ class SendClientDailyReminder extends Command
   protected $description = 'Enviar recordatorio en PDF a clientes que tienen cita hoy';
 
   /**
+   * Comando: clients:daily-reminder
+   * - Agrupa las citas por cliente y envía un PDF con el comprobante.
+   * - Si cambias la plantilla del PDF (`pdf.appointment_ticket`) asegúrate
+   *   de que la vista siga recibiendo la variable `appointment`.
+   * - Para cargas grandes: agrupar con `chunk()` y usar colas para envío.
+   */
+
+  /**
    * Execute the console command.
    */
   public function handle()

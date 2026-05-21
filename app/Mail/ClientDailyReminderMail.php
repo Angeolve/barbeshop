@@ -27,6 +27,14 @@ class ClientDailyReminderMail extends Mailable
   }
 
   /**
+   * Comentario: Email diario para cliente con comprobante PDF.
+   * - `pdfData` es el contenido binario del PDF generado sobre la cita.
+   * - La vista `emails.client_daily_reminder` recibe `client`, `appointment`
+   *   y `date`. Si amplías la plantilla, asegúrate de pasar las variables
+   *   necesarias desde el comando que lo construye.
+   */
+
+  /**
    * Build the message.
    */
   public function build()

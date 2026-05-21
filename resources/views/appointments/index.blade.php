@@ -1,6 +1,17 @@
 <x-app-layout>
     
-    <div class="py-8">
+        <div class="py-8">
+                {{--
+                        Vista: appointments.index
+                        Comentarios: Esta plantilla lista las citas según el rol del usuario.
+                        - El encabezado muestra un botón para crear nuevas citas.
+                        - La tabla itera `$appointments` y muestra columnas diferenciales
+                            para clientes, barberos, servicio, fecha/hora y estado.
+                        Guía de modificación:
+                        - Para agregar una columna, añadir un <th> en el <thead> y el
+                            correspondiente <td> dentro del loop `@forelse`.
+                        - No modificar las clases Tailwind si solo cambias el texto.
+                --}}
         <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
 
             <div class="flex justify-between items-center mb-6 bg-white p-6 shadow-xl sm:rounded-lg">
@@ -19,6 +30,10 @@
             @endif
 
             <div class="bg-white overflow-hidden shadow-xl rounded-2xl border border-amber-500/10">
+                {{-- Tabla de citas: revisar el loop @forelse en el <tbody>. Si
+                     necesitas mostrar campos adicionales del modelo
+                     `Appointment`, asegúrate de cargarlos en el controlador
+                     (`Appointment::with([...])`) para evitar N+1. --}}
                 <div class="overflow-x-auto">
                     <table class="min-w-full">
                         <thead>
@@ -35,6 +50,7 @@
                         </thead>
                         <tbody class="divide-y divide-gray-100">
                             @forelse ($appointments as $appointment)
+                                {{-- Inicio de fila de cita --}}
                                 <tr class="hover:bg-amber-50/40 transition-colors duration-100">
 
                                     @if(Auth::user()->role !== 'client')
@@ -124,6 +140,7 @@
                                     </td>
                                 </tr>
                             @empty
+                                {{-- Mensaje cuando no hay citas: se incluye enlace para crear. --}}
                                 <tr>
                                     <td colspan="6" class="px-6 py-16 text-center">
                                         <div class="flex flex-col items-center gap-3">

@@ -5,7 +5,14 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
+        {{--
+                Vista: staff.create
+                Comentarios: Formulario para registrar un nuevo barbero.
+                - Si se añaden campos obligatorios, actualizar validaciones en
+                    `StaffController@store` y el `fillable` en `User`.
+                - Mantener consistencia con estilos y mensajes de error.
+        --}}
+        <div class="py-12">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
                 

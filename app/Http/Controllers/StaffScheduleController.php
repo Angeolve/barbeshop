@@ -9,6 +9,18 @@ use Illuminate\Http\Request;
 class StaffScheduleController extends Controller
 {
     /**
+     * Módulo: Horarios de Barberos (StaffSchedule)
+     * Propósito: Gestionar horarios por barbero y turno.
+     * Comentarios y guía de modificación:
+     * - El modelo `StaffSchedule` guarda booleanos para cada día y un
+     *   campo `shift` con valores ('mañana','noche'). Si cambias nombres
+     *   de días o añades franjas, actualiza migración y `fillable`.
+     * - En `index()` se crea un horario por defecto si no existe.
+     *   Esto evita errores en vistas que esperan `$barber->schedule`.
+     * - `update()` usa `has()` en lugar de confiar en valores booleanos
+     *   del request para manejar checkboxes en formularios.
+     */
+    /**
      * Mostrar los horarios de todos los barberos.
      */
     public function index()

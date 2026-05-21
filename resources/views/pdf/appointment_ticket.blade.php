@@ -1,3 +1,12 @@
+{{--
+    Plantilla PDF: appointment_ticket.blade.php
+    Comentarios: Esta plantilla genera el ticket PDF que se adjunta al
+    email de confirmación. Usa estilos en línea y clases simples porque
+    DomPDF procesa CSS limitado. Si agregas campos nuevos en el modelo
+    `Appointment` (ej. `notes`), muéstralos aquí con `{{ $appointment->notes }}`.
+    Evita modificar las reglas de estilo si solo alteras texto; para
+    cambios de diseño mayores crea una nueva plantilla PDF.
+--}}
 <!doctype html>
 <html>
 <head>

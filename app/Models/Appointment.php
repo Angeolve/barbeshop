@@ -10,6 +10,13 @@ class Appointment extends Model
 {
     use HasFactory, SoftDeletes; // <-- Activamos Soft Deletes
 
+    /**
+     * Comentarios: Este modelo representa una cita en la barbería. Usamos
+     * SoftDeletes para poder recuperar citas eliminadas (soft delete).
+     * La propiedad `$fillable` define los campos que pueden ser
+     * asignados en masa (importantísimo para `Appointment::create([...])`).
+     */
+
     protected $fillable = [
         'client_id',
         'staff_id',
